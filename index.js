@@ -1,121 +1,73 @@
-const form = document.getElementById("searchForm");
-const input = document.getElementById("wordInput");
-const resultDiv = document.getElementById("result");
-const savedList = document.getElementById("savedList");
-
-form.addEventListener("submit", function (event) {
-  event.preventDefault();
-  searchWord();
-});
-
-// Load saved words on page load
-document.addEventListener("DOMContentLoaded", function () {
-  loadSavedWords();
-});
-
-function searchWord() {
-  const word = input.value.trim();
-  if (word === "") {
-    displayError("Please enter a word.");
-    return;
-  }
-
-  resultDiv.innerHTML = "Searching...";
-
-  fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`)
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Word not found");
-      }
-      return response.json();
-    })
-    .then((data) => {
-      displayResult(data[0]);
-    })
-    .catch((error) => {
-      console.error("Error fetching data:", error);
-      displayError(
-        "An error occurred while fetching the definition. Please try again.",
-      );
-    });
+const bookStore = {
+    name: 'Flatbooks Technical Books',
+    books: [
+        {
+            id:1,
+            title: 'Eloquent JavaScript: A Modern Introduction to Programming',
+            author: 'Marjin Haverbeke',
+            imageUrl: 'https://images-na.ssl-images-amazon.com/images/I/51IKycqTPUL._SX218_BO1,204,203,200_QL40_FMwebp_.jpg',
+            
+        },
+        {
+            id:2,
+            title: 'JavaScript & JQuery: Interactive Front-End Web Development',
+            author: 'Jon Duckett',
+            imageUrl: 'https://images-na.ssl-images-amazon.com/images/I/31SRWF+LkKL._SX398_BO1,204,203,200_.jpg'
+        },
+        {
+            id:3,
+            title: 'JavaScript: The Good Parts',
+            author: 'Douglas Crockford',
+            imageUrl: 'https://images-na.ssl-images-amazon.com/images/I/5131OWtQRaL._SX218_BO1,204,203,200_QL40_FMwebp_.jpg',
+        },
+        {
+            id:4,
+            title: 'JavaScript: The Definitive Guide',
+            author: 'David Flanagan',
+            imageUrl: "https://images-na.ssl-images-amazon.com/images/I/51wijnc-Y8L._SX379_BO1,204,203,200_.jpg"
+            
+        },
+        {
+            id:5,
+            title: 'You Don’t Know JS',
+            author: 'Kyle Simpson',
+            imageUrl: 'https://images-na.ssl-images-amazon.com/images/I/41T5H8u7fUL._SX331_BO1,204,203,200_.jpg'
+        },
+        {
+            id:6,
+            title: 'Cracking the Coding Interview',
+            author: 'Gayle Laakmann McDowell',
+            imageUrl: 'https://images-na.ssl-images-amazon.com/images/I/41oYsXjLvZL._SY344_BO1,204,203,200_.jpg'
+            
+        }
+    ]
 }
 
-function displayResult(entry) {
-  const { word, phonetic, phonetics, meanings } = entry;
+// Write your code here!
 
-  let html = `<div class="word-title">${word}</div>`;
+const bookList = document.getElementById('book-list')
 
-  if (phonetic) {
-    html += `<div class="phonetic">${phonetic}</div>`;
-  }
+bookStore.books.forEach(book => {
+    //Create the container for this specific book
+    const bookContainer = document.createElement('li')
 
-  // Do audio
-  const audioPhonetic = phonetics.find((p) => p.audio);
-  if (audioPhonetic) {
-    html += `<button class="audio-btn" onclick="playAudio('${audioPhonetic.audio}')">Play Pronunciation</button>`;
-  }
+    //Create and set the title
+    const bookTitle = document.createElement('h3')
+    bookTitle.textContent = book.title;
 
-  html += `<button class="save-btn" onclick="saveWord('${word}')">Save Word</button>`;
+    //Create and set the author
+    const bookAuthor = document.createElement('p')
+    bookAuthor.textContent = book.author;
 
-  meanings.forEach((meaning) => {
-    html += `<div class="meaning">`;
-    html += `<div class="part-of-speech">${meaning.partOfSpeech}</div>`;
-    meaning.definitions.forEach((def) => {
-      html += `<div class="definition">${def.definition}</div>`;
-      if (def.example) {
-        html += `<div class="example"><em>Example: ${def.example}</em></div>`;
-      }
-    });
-    if (meaning.synonyms && meaning.synonyms.length > 0) {
-      html += `<div class="synonyms">Synonyms: ${meaning.synonyms.join(", ")}</div>`;
-    }
-    html += `</div>`;
-  });
+    //Create and set the image
+    const bookImage = document.createElement('img')
+    bookImage.src = book.imageUrl;
 
-  resultDiv.innerHTML = html;
+    //Add the title, author and imageto the book container
+    bookContainer.append(bookTitle, bookAuthor, bookImage)
+
+    //Add the book container to the list of books in the DOM
+    bookList.appendChild(bookContainer);
 }
+)
 
-function displayError(message) {
-  resultDiv.innerHTML = `<div class="error">${message}</div>`;
-}
-
-function playAudio(audioUrl) {
-  const audio = new Audio(audioUrl);
-  audio.play();
-}
-
-function saveWord(word) {
-  let saved = JSON.parse(localStorage.getItem("savedWords")) || [];
-  if (!saved.includes(word)) {
-    saved.push(word);
-    localStorage.setItem("savedWords", JSON.stringify(saved));
-    displaySavedWords(saved);
-    alert(`${word} saved!`);
-  } else {
-    alert(`${word} is already saved.`);
-  }
-}
-
-function loadSavedWords() {
-  const saved = JSON.parse(localStorage.getItem("savedWords")) || [];
-  displaySavedWords(saved);
-}
-
-function displaySavedWords(saved) {
-  savedList.innerHTML = "";
-  saved.forEach((word) => {
-    const li = document.createElement("li");
-    li.innerHTML = `
-      <span>${word}</span>
-      <button class="remove-btn" onclick="removeWord('${word}')">Remove</button>
-    `;
-    savedList.appendChild(li);
-  });
-}
-
-function removeWord(word) {
-  let saved = JSON.parse(localStorage.getItem("savedWords")) || [];
-  saved = saved.filter((w) => w !== word);
-  localStorage.setItem("savedWords", JSON.stringify(saved));
-  displaySavedWords(saved);
-}
