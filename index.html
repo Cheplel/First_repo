@@ -1,29 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
-<head> 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wordly</title>
+<html>
+  <head>
+    <title>Creating and Inserting DOM Elements</title>
     <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div class="container">
-        <h1>Wordly</h1>
-        <form id="searchForm">
-            <input type="text" id="wordInput" placeholder="Enter a word" aria-label="word to search">
-            <button type="submit" id="searchBtn">Search</button>
-        </form>
-        <div id="result">
-            <!--Placeholder for dynamic content-->
-        </div>
-        <div id="savedWords">
-            <h2>Saved Words</h2>
-            <ul id="savedList"></ul>
-            </div>
-    </div>
-    
+  </head>
+  <body>
+    <header> 
+      <h1 id="header">This is a BookStore</h1> 
+    </header>
+    <main>
+      <div class="list">
+        <ul id="book-list">
+          <li id = "delete-this">
+            <h3>Example Title</h3>
+            <p>Example Author</p>
+            <img src="https://i.ebayimg.com/images/g/1PUAAOSwBMJkMDxv/s-l500.webp">
+          </li>
+        </ul>
+      </div>
+    </main>
     <script src="index.js"></script>
-
-
-</body>
-</html>
+  </body>
+  </html>
+  
