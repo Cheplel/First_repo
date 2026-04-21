@@ -1,25 +1,17 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <title>Creating and Inserting DOM Elements</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Posts</title>
     <link rel="stylesheet" href="style.css">
   </head>
   <body>
-    <header> 
-      <h1 id="header">This is a BookStore</h1> 
-    </header>
-    <main>
-      <div class="list">
-        <ul id="book-list">
-          <li id = "delete-this">
-            <h3>Example Title</h3>
-            <p>Example Author</p>
-            <img src="https://i.ebayimg.com/images/g/1PUAAOSwBMJkMDxv/s-l500.webp">
-          </li>
-        </ul>
-      </div>
-    </main>
+    <div class = "container">
+      <h1> Random Posts </h1>
+      <button onclick="loadRandomPosts(0)">Load Random Posts</button>
+    <div id="posts"></div>
+    </div>
     <script src="index.js"></script>
   </body>
-  </html>
-  
+</html>
